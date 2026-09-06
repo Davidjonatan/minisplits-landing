@@ -1,0 +1,164 @@
+---
+// GroupServices.astro
+---
+<div class="max-w-6xl mx-auto py-16 px-4">
+  <div class="text-center mb-12">
+    <h2 class="text-3xl font-bold text-slate-800 mb-4">Selecciona el Servicio que Necesitas</h2>
+    <p class="text-slate-600 max-w-2xl mx-auto">Completa la información básica para agendar tu servicio o solicitar una cotización. En el siguiente paso te pediremos tus datos de contacto.</p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    
+    <!-- Grupo 1: Climatización -->
+    <div class="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden" id="group-climatizacion">
+      <div class="bg-blue-600 text-white p-6">
+        <h3 class="text-2xl font-bold flex items-center gap-2">
+          <span class="text-3xl">❄️</span> Climatización Residencial
+        </h3>
+        <p class="text-blue-100 mt-2 text-sm">Minisplits y Aires Evaporativos. Agendamiento vía WhatsApp.</p>
+      </div>
+      <form class="p-6 space-y-6 service-form" data-grupo="climatizacion" data-destino="whatsapp">
+        <div>
+          <label for="clima-servicio" class="block text-sm font-medium text-slate-700 mb-1">Tipo de Servicio *</label>
+          <select id="clima-servicio" name="servicio" required class="w-full rounded-lg border-slate-300 border p-3 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
+            <option value="">-- Selecciona una opción --</option>
+            <optgroup label="Minisplits">
+              <option value="preventivo_minisplit">Mantenimiento Preventivo (Lavado)</option>
+              <option value="fuga_minisplit">Detección de Fuga y Carga de Gas</option>
+              <option value="instalacion_minisplit">Instalación de Equipo Nuevo</option>
+              <option value="reparacion_minisplit">Revisión / Reparación General</option>
+            </optgroup>
+            <optgroup label="Aires Evaporativos">
+              <option value="evaporativo_temporada">Mantenimiento de Temporada (Paja, Bomba, etc.)</option>
+              <option value="reparacion_evaporativo">Reparación de Motor / Fallas</option>
+            </optgroup>
+          </select>
+        </div>
+        
+        <div>
+          <label for="clima-capacidad" class="block text-sm font-medium text-slate-700 mb-1">Capacidad o Ubicación del Equipo *</label>
+          <input type="text" id="clima-capacidad" name="detalles" required placeholder="Ej: Minisplit de 1 Tonelada en recámara principal" class="w-full rounded-lg border-slate-300 border p-3 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
+        </div>
+
+        <div>
+          <label for="clima-fecha" class="block text-sm font-medium text-slate-700 mb-1">Fecha Sugerida para el Servicio *</label>
+          <input type="date" id="clima-fecha" name="fecha" required class="w-full rounded-lg border-slate-300 border p-3 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
+        </div>
+
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex justify-center items-center gap-2">
+          Continuar para Agendar <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+        </button>
+      </form>
+    </div>
+
+    <!-- Grupo 2: Electricidad -->
+    <div class="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden" id="group-electricidad">
+      <div class="bg-amber-600 text-white p-6">
+        <h3 class="text-2xl font-bold flex items-center gap-2">
+          <span class="text-3xl">⚡</span> Electricidad Residencial
+        </h3>
+        <p class="text-amber-100 mt-2 text-sm">Centros de carga, cableado, 220V. Cotización vía Correo.</p>
+      </div>
+      <form class="p-6 space-y-6 service-form" data-grupo="electricidad" data-destino="gmail">
+        <div>
+          <label for="elec-trabajo" class="block text-sm font-medium text-slate-700 mb-1">Trabajo Requerido *</label>
+          <select id="elec-trabajo" name="servicio" required class="w-full rounded-lg border-slate-300 border p-3 focus:ring-amber-500 focus:border-amber-500 outline-none transition-colors">
+            <option value="">-- Selecciona una opción --</option>
+            <option value="linea_220v">Instalación de línea 220V para Clima</option>
+            <option value="centro_carga">Reemplazo o balanceo de Centro de Carga</option>
+            <option value="corto_circuito">Solución a Corto Circuito / Falla</option>
+            <option value="recableado">Recableado General o Adiciones</option>
+            <option value="otro">Otro (Describir abajo)</option>
+          </select>
+        </div>
+        
+        <div>
+          <label for="elec-red" class="block text-sm font-medium text-slate-700 mb-1">Tipo de Red *</label>
+          <select id="elec-red" name="tipo_red" required class="w-full rounded-lg border-slate-300 border p-3 focus:ring-amber-500 focus:border-amber-500 outline-none transition-colors">
+            <option value="110v">Monofásica (110V)</option>
+            <option value="220v">Bifásica (220V)</option>
+            <option value="no_se">No estoy seguro</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="elec-descripcion" class="block text-sm font-medium text-slate-700 mb-1">Descripción del Proyecto o Falla *</label>
+          <textarea id="elec-descripcion" name="detalles" required rows="3" placeholder="Describe brevemente lo que necesitas..." class="w-full rounded-lg border-slate-300 border p-3 focus:ring-amber-500 focus:border-amber-500 outline-none transition-colors resize-none"></textarea>
+        </div>
+
+        <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex justify-center items-center gap-2">
+          Continuar para Cotizar <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+        </button>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Escuchar eventos de preselección desde el Carousel
+    document.addEventListener('servicePreselected', (e) => {
+      const { group, service } = (e as CustomEvent).detail;
+      
+      if (group === 'climatizacion') {
+        const select = document.getElementById('clima-servicio');
+        if (select) select.value = service;
+        
+        // Destacar visualmente el formulario
+        const container = document.getElementById('group-climatizacion');
+        if(container) {
+          container.classList.add('ring-4', 'ring-blue-400', 'scale-[1.02]', 'transition-all');
+          setTimeout(() => container.classList.remove('ring-4', 'ring-blue-400', 'scale-[1.02]'), 1500);
+        }
+      } else if (group === 'electricidad') {
+        const select = document.getElementById('elec-trabajo');
+        if (select) select.value = service;
+        
+        const container = document.getElementById('group-electricidad');
+        if(container) {
+          container.classList.add('ring-4', 'ring-amber-400', 'scale-[1.02]', 'transition-all');
+          setTimeout(() => container.classList.remove('ring-4', 'ring-amber-400', 'scale-[1.02]'), 1500);
+        }
+      }
+    });
+
+    // 2. Manejar el envío de ambos formularios
+    const forms = document.querySelectorAll('.service-form');
+    
+    forms.forEach(form => {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(e.target);
+        const grupo = form.getAttribute('data-grupo');
+        const destino = form.getAttribute('data-destino');
+        
+        const payload: Record<string, any> = {
+          grupo,
+          destino,
+          servicio: formData.get('servicio'),
+          detalles: formData.get('detalles'),
+          // Campos específicos según grupo
+          fecha: formData.get('fecha') || null,
+          tipo_red: formData.get('tipo_red') || null
+        };
+        
+        // Extraer texto legible del select principal
+        const selectEl = form.querySelector('select[name="servicio"]') as HTMLSelectElement | null;
+        if (selectEl && selectEl.options[selectEl.selectedIndex]) {
+          payload.servicioTexto = selectEl.options[selectEl.selectedIndex].text;
+        }
+
+        // Guardar en localStorage
+        localStorage.setItem('servicio_registrado', JSON.stringify(payload));
+        
+        // Disparar evento personalizado para actualizar componente final (opcional, si está cargado en la misma SPA)
+        document.dispatchEvent(new Event('bookingDataUpdated'));
+
+        // Hacer scroll suave hacia la sección de agendar (Paso 2)
+        document.getElementById('agendar')?.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  });
+</script>

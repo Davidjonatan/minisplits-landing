@@ -1,0 +1,144 @@
+---
+// Carousel.astro
+---
+<div class="relative w-full h-[500px] overflow-hidden" id="hero-carousel">
+  <!-- Slides Container -->
+  <div class="carousel-inner relative h-full w-full">
+    
+    <!-- Slide 1: Minisplits -->
+    <div class="carousel-item absolute inset-0 transition-opacity duration-700 ease-in-out opacity-100 z-10 bg-gradient-to-r from-blue-900 to-slate-900 flex items-center justify-center text-center px-4">
+      <div class="max-w-3xl">
+        <span class="inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-wider text-blue-200 uppercase bg-blue-800 rounded-full">Climatización</span>
+        <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-4">Mantenimiento de Minisplits</h2>
+        <p class="text-lg md:text-xl text-slate-300 mb-8">Lavado preventivo profesional, detección de fugas y recarga de gas refrigerante.</p>
+        <button data-preselect-group="climatizacion" data-preselect-service="preventivo_minisplit" class="carousel-cta bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105">
+          Agendar Minisplit
+        </button>
+      </div>
+    </div>
+
+    <!-- Slide 2: Evaporativos -->
+    <div class="carousel-item absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0 z-0 bg-gradient-to-r from-cyan-900 to-slate-800 flex items-center justify-center text-center px-4">
+      <div class="max-w-3xl">
+        <span class="inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-wider text-cyan-200 uppercase bg-cyan-800 rounded-full">Climatización</span>
+        <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-4">Aires Evaporativos</h2>
+        <p class="text-lg md:text-xl text-slate-300 mb-8">Paquete de temporada: cambio de paja, bandas, chumaceras y bomba. ¡Prepárate para el calor!</p>
+        <button data-preselect-group="climatizacion" data-preselect-service="evaporativo_temporada" class="carousel-cta bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105">
+          Agendar Evaporativo
+        </button>
+      </div>
+    </div>
+
+    <!-- Slide 3: Electricidad -->
+    <div class="carousel-item absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0 z-0 bg-gradient-to-r from-amber-900 to-slate-900 flex items-center justify-center text-center px-4">
+      <div class="max-w-3xl">
+        <span class="inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-wider text-amber-200 uppercase bg-amber-800 rounded-full">Electricidad</span>
+        <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-4">Instalaciones Eléctricas</h2>
+        <p class="text-lg md:text-xl text-slate-300 mb-8">Líneas 110V/220V para equipos de clima y balanceo profesional de centros de carga.</p>
+        <button data-preselect-group="electricidad" data-preselect-service="linea_220v" class="carousel-cta bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105">
+          Cotizar Instalación
+        </button>
+      </div>
+    </div>
+    
+  </div>
+
+  <!-- Navigation Controls -->
+  <button id="carousel-prev" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full backdrop-blur-sm transition-colors">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+    </svg>
+  </button>
+  <button id="carousel-next" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full backdrop-blur-sm transition-colors">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+    </svg>
+  </button>
+
+  <!-- Indicators -->
+  <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex space-x-2">
+    <button class="carousel-dot w-3 h-3 rounded-full bg-white opacity-100 transition-opacity" data-index="0"></button>
+    <button class="carousel-dot w-3 h-3 rounded-full bg-white opacity-50 transition-opacity" data-index="1"></button>
+    <button class="carousel-dot w-3 h-3 rounded-full bg-white opacity-50 transition-opacity" data-index="2"></button>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const items = document.querySelectorAll('.carousel-item');
+    const dots = document.querySelectorAll('.carousel-dot');
+    const prevBtn = document.getElementById('carousel-prev');
+    const nextBtn = document.getElementById('carousel-next');
+    const ctas = document.querySelectorAll('.carousel-cta');
+    
+    let currentIndex = 0;
+    let autoPlayInterval;
+    const intervalTime = 5000;
+
+    const showSlide = (index) => {
+      items.forEach((item, i) => {
+        if (i === index) {
+          item.classList.remove('opacity-0', 'z-0');
+          item.classList.add('opacity-100', 'z-10');
+          dots[i].classList.remove('opacity-50');
+          dots[i].classList.add('opacity-100');
+        } else {
+          item.classList.remove('opacity-100', 'z-10');
+          item.classList.add('opacity-0', 'z-0');
+          dots[i].classList.remove('opacity-100');
+          dots[i].classList.add('opacity-50');
+        }
+      });
+    };
+
+    const nextSlide = () => {
+      currentIndex = (currentIndex + 1) % items.length;
+      showSlide(currentIndex);
+    };
+
+    const prevSlide = () => {
+      currentIndex = (currentIndex - 1 + items.length) % items.length;
+      showSlide(currentIndex);
+    };
+
+    const startAutoPlay = () => {
+      stopAutoPlay();
+      autoPlayInterval = setInterval(nextSlide, intervalTime);
+    };
+
+    const stopAutoPlay = () => {
+      if (autoPlayInterval) clearInterval(autoPlayInterval);
+    };
+
+    // Event Listeners for Nav
+    if(nextBtn) nextBtn.addEventListener('click', () => { nextSlide(); startAutoPlay(); });
+    if(prevBtn) prevBtn.addEventListener('click', () => { prevSlide(); startAutoPlay(); });
+    
+    dots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => {
+        currentIndex = idx;
+        showSlide(currentIndex);
+        startAutoPlay();
+      });
+    });
+
+    // Event listeners for CTAs (Pre-selection)
+    ctas.forEach(cta => {
+      cta.addEventListener('click', (e) => {
+        const group = cta.getAttribute('data-preselect-group');
+        const service = cta.getAttribute('data-preselect-service');
+        
+        // Disparar evento personalizado para que GroupServices lo escuche
+        document.dispatchEvent(new CustomEvent('servicePreselected', {
+          detail: { group, service }
+        }));
+        
+        // Scroll hacia la sección
+        document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // Init
+    startAutoPlay();
+  });
+</script>

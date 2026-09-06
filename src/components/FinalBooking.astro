@@ -1,0 +1,225 @@
+---
+// FinalBooking.astro
+---
+<div class="max-w-4xl mx-auto py-16 px-4">
+  <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+    
+    <!-- Header -->
+    <div class="bg-slate-900 text-white p-6 text-center">
+      <h2 class="text-3xl font-bold mb-2">Confirma tu Solicitud</h2>
+      <p class="text-slate-300">Paso Final: Déjanos tus datos de contacto para comunicarnos contigo.</p>
+    </div>
+
+    <!-- Contenido Dinámico (Paso 1 info) -->
+    <div id="booking-summary-container" class="p-6 bg-slate-50 border-b border-slate-200 hidden">
+      <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        Resumen de Servicio Seleccionado
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+        <div>
+          <span class="block text-slate-500 font-medium">Categoría</span>
+          <span id="summary-grupo" class="font-bold text-slate-800 capitalize">-</span>
+        </div>
+        <div>
+          <span class="block text-slate-500 font-medium">Servicio</span>
+          <span id="summary-servicio" class="font-bold text-slate-800">-</span>
+        </div>
+        <div class="md:col-span-2">
+          <span class="block text-slate-500 font-medium">Detalles Extra</span>
+          <span id="summary-detalles" class="text-slate-700 italic">-</span>
+        </div>
+      </div>
+      <div class="mt-4 text-right">
+        <button id="btn-edit-service" class="text-blue-600 text-sm font-semibold hover:underline">
+          &larr; Cambiar Servicio
+        </button>
+      </div>
+    </div>
+
+    <!-- Advertencia de falta de selección -->
+    <div id="booking-empty-state" class="p-12 text-center">
+      <div class="text-5xl mb-4">👆</div>
+      <h3 class="text-xl font-bold text-slate-800 mb-2">Aún no has seleccionado un servicio</h3>
+      <p class="text-slate-600 mb-6">Por favor, regresa al paso anterior y selecciona el tipo de servicio que requieres.</p>
+      <button id="btn-go-back" class="bg-blue-100 text-blue-700 hover:bg-blue-200 font-bold py-2 px-6 rounded-lg transition-colors">
+        Ver Servicios
+      </button>
+    </div>
+
+    <!-- Formulario de Contacto -->
+    <div id="booking-form-container" class="p-6 md:p-8 hidden">
+      <form id="final-contact-form" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="contacto-nombre" class="block text-sm font-medium text-slate-700 mb-1">Nombre Completo *</label>
+            <input type="text" id="contacto-nombre" name="nombre" required placeholder="Ej: Juan Pérez" class="w-full rounded-lg border-slate-300 border p-3 focus:ring-slate-500 focus:border-slate-500 outline-none transition-colors">
+          </div>
+          <div>
+            <label for="contacto-telefono" class="block text-sm font-medium text-slate-700 mb-1">Teléfono / WhatsApp *</label>
+            <input type="tel" id="contacto-telefono" name="telefono" required placeholder="Ej: 81 1234 5678" class="w-full rounded-lg border-slate-300 border p-3 focus:ring-slate-500 focus:border-slate-500 outline-none transition-colors">
+          </div>
+        </div>
+
+        <div>
+          <label for="contacto-direccion" class="block text-sm font-medium text-slate-700 mb-1">Dirección / Colonia (Para validar cobertura) *</label>
+          <input type="text" id="contacto-direccion" name="direccion" required placeholder="Ej: Col. Mitras Centro, Monterrey" class="w-full rounded-lg border-slate-300 border p-3 focus:ring-slate-500 focus:border-slate-500 outline-none transition-colors">
+        </div>
+
+        <!-- reCAPTCHA -->
+        <div class="flex flex-col items-center my-6">
+          <label class="block text-sm font-medium text-slate-700 mb-2 w-full">Verificación de Seguridad *</label>
+          <!-- El div del recaptcha -->
+          <div class="g-recaptcha" data-sitekey="TU_SITE_KEY" data-theme="light"></div>
+          <p id="recaptcha-error" class="text-red-500 text-sm mt-2 hidden">Por favor, completa la verificación de reCAPTCHA.</p>
+        </div>
+
+        <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 px-6 rounded-xl text-lg transition-colors flex justify-center items-center gap-2 shadow-lg">
+          Enviar Solicitud <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" /></svg>
+        </button>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Declaración de variables para Typscript si es necesario, o en JS Vainilla
+  declare var grecaptcha: any;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const summaryContainer = document.getElementById('booking-summary-container');
+    const emptyState = document.getElementById('booking-empty-state');
+    const formContainer = document.getElementById('booking-form-container');
+    
+    // Función para leer de localStorage y actualizar vista
+    const updateViewFromStorage = () => {
+      const dataStr = localStorage.getItem('servicio_registrado');
+      
+      if (dataStr) {
+        try {
+          const data = JSON.parse(dataStr);
+          
+          // Ocultar empty state, mostrar form y resumen
+          if(emptyState) emptyState.classList.add('hidden');
+          if(summaryContainer) summaryContainer.classList.remove('hidden');
+          if(formContainer) formContainer.classList.remove('hidden');
+          
+          // Llenar datos de resumen
+          const grupoEl = document.getElementById('summary-grupo');
+          const servicioEl = document.getElementById('summary-servicio');
+          const detallesEl = document.getElementById('summary-detalles');
+          
+          if(grupoEl) grupoEl.textContent = data.grupo === 'climatizacion' ? '❄️ Climatización' : '⚡ Electricidad';
+          if(servicioEl) servicioEl.textContent = data.servicioTexto || data.servicio;
+          
+          let detallesExtra = `Detalles: ${data.detalles}`;
+          if (data.fecha) detallesExtra += ` | Fecha sugerida: ${data.fecha}`;
+          if (data.tipo_red) detallesExtra += ` | Red: ${data.tipo_red.toUpperCase()}`;
+          if(detallesEl) detallesEl.textContent = detallesExtra;
+
+        } catch (e) {
+          console.error("Error leyendo localStorage", e);
+          showEmptyState();
+        }
+      } else {
+        showEmptyState();
+      }
+    };
+
+    const showEmptyState = () => {
+      if(summaryContainer) summaryContainer.classList.add('hidden');
+      if(formContainer) formContainer.classList.add('hidden');
+      if(emptyState) emptyState.classList.remove('hidden');
+    };
+
+    // Botones de navegación interna
+    document.getElementById('btn-go-back')?.addEventListener('click', () => {
+      document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth' });
+    });
+    document.getElementById('btn-edit-service')?.addEventListener('click', () => {
+      document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Escuchar el evento de formulario enviado en GroupServices
+    document.addEventListener('bookingDataUpdated', updateViewFromStorage);
+    
+    // Inicializar vista al cargar la página
+    updateViewFromStorage();
+
+    // Manejar envío final
+    const finalForm = document.getElementById('final-contact-form');
+    finalForm?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      // 1. Validar localStorage de nuevo por seguridad
+      const dataStr = localStorage.getItem('servicio_registrado');
+      if (!dataStr) {
+        alert("Parece que el servicio seleccionado se perdió. Por favor, vuelve a seleccionarlo.");
+        showEmptyState();
+        return;
+      }
+      const data = JSON.parse(dataStr);
+
+      // 2. Validar reCAPTCHA
+      const recaptchaResponse = typeof grecaptcha !== 'undefined' ? grecaptcha.getResponse() : '';
+      const recaptchaError = document.getElementById('recaptcha-error');
+      
+      if (recaptchaResponse.length === 0) {
+        if(recaptchaError) recaptchaError.classList.remove('hidden');
+        return;
+      } else {
+        if(recaptchaError) recaptchaError.classList.add('hidden');
+      }
+
+      // 3. Obtener datos de contacto
+      const formData = new FormData(e.target as HTMLFormElement);
+      const nombre = formData.get('nombre');
+      const telefono = formData.get('telefono');
+      const direccion = formData.get('direccion');
+
+      // 4. Lógica de Despacho
+      if (data.destino === 'whatsapp') {
+        const telefonoWA = 'TU_NUMERO_WHATSAPP'; // Reemplazar con el número real, ej: 5218112345678
+        const mensaje = `Hola, me interesa agendar un servicio de *${data.grupo.toUpperCase()}*.\n\n` +
+                        `*Servicio:* ${data.servicioTexto || data.servicio}\n` +
+                        `*Detalles del equipo:* ${data.detalles}\n` +
+                        `*Fecha sugerida:* ${data.fecha}\n\n` +
+                        `*Mis datos de contacto:*\n` +
+                        `Nombre: ${nombre}\n` +
+                        `Teléfono: ${telefono}\n` +
+                        `Ubicación: ${direccion}`;
+        
+        const wpUrl = `https://wa.me/${telefonoWA}?text=${encodeURIComponent(mensaje)}`;
+        
+        // Limpiar para próximos usos y redirigir
+        localStorage.removeItem('servicio_registrado');
+        window.open(wpUrl, '_blank');
+        
+        // Opcional: mostrar mensaje de agradecimiento o recargar
+        alert("Redirigiendo a WhatsApp. ¡Gracias por tu preferencia!");
+        window.location.reload();
+
+      } else if (data.destino === 'gmail') {
+        const correo = 'TU_CORREO_ELECTRONICO'; // Reemplazar con el correo real
+        const subject = `Solicitud de Cotización Eléctrica: ${data.servicioTexto || data.servicio}`;
+        const body = `Hola, necesito una cotización para un trabajo eléctrico.\n\n` +
+                     `TIPO DE TRABAJO: ${data.servicioTexto || data.servicio}\n` +
+                     `TIPO DE RED: ${data.tipo_red.toUpperCase()}\n` +
+                     `DESCRIPCIÓN DEL PROYECTO: ${data.detalles}\n\n` +
+                     `MIS DATOS DE CONTACTO:\n` +
+                     `Nombre: ${nombre}\n` +
+                     `Teléfono: ${telefono}\n` +
+                     `Ubicación: ${direccion}\n`;
+                     
+        const mailtoUrl = `mailto:${correo}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        
+        localStorage.removeItem('servicio_registrado');
+        window.location.href = mailtoUrl;
+        
+        alert("Abriendo cliente de correo. Si no se abre, por favor envía un correo a " + correo);
+        window.location.reload();
+      }
+    });
+  });
+</script>

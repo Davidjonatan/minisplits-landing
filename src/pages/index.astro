@@ -1,73 +1,28 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Carousel from '../components/Carousel.astro';
+import GroupServices from '../components/GroupServices.astro';
+import FinalBooking from '../components/FinalBooking.astro';
 ---
 
 <Layout title="Servicios Técnicos | Minisplits, Aires Evaporativos y Electricidad">
-  <!-- Hero Section -->
-  <section class="bg-gradient-to-r from-slate-900 to-blue-900 text-white py-20 px-4 text-center">
-    <div class="max-w-4xl mx-auto">
-      <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
-        Mantenimiento y Reparación Profesional para tu Hogar
-      </h1>
-      <p class="text-lg md:text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
-        Especialistas en minisplits, aires evaporativos e instalaciones eléctricas residenciales. Trabajo garantizado y atención rápida.
-      </p>
-      <div class="flex flex-col sm:flex-row justify-center gap-4">
-        <a href="/agendar" class="bg-blue-500 hover:bg-blue-600 text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-colors text-lg">
-          Agendar Servicio Ahora
-        </a>
-        <a href="/servicios" class="bg-slate-800 hover:bg-slate-700 text-white border border-slate-600 font-bold px-8 py-4 rounded-xl transition-colors text-lg">
-          Ver Catálogo de Servicios
-        </a>
-      </div>
-    </div>
+  <!-- 1. Sección Inicio (Hero + Carousel) -->
+  <section id="inicio">
+    <Carousel />
   </section>
 
-  <!-- Tarjetas de Servicios Principales -->
-  <section class="max-w-6xl mx-auto py-16 px-4">
-    <h2 class="text-3xl font-bold text-center mb-12 text-slate-800">Nuestros Servicios Principales</h2>
-    
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <!-- Servicio 1: Minisplits -->
-      <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100 flex flex-col justify-between hover:shadow-xl transition-shadow">
-        <div>
-          <div class="text-4xl mb-4">❄️</div>
-          <h3 class="text-2xl font-bold mb-3 text-slate-800">Minisplits</h3>
-          <p class="text-slate-600 mb-4">
-            Instalación profesional, mantenimiento preventivo y correctivo, detección de fugas y recarga de gas refrigerante.
-          </p>
-        </div>
-        <a href="/agendar?servicio=minisplit" class="text-blue-600 font-semibold hover:underline mt-2 inline-block">Agendar este servicio &rarr;</a>
-      </div>
+  <!-- 2. Sección Servicios (Formularios Paso 1) -->
+  <section id="servicios" class="bg-slate-100 border-t border-slate-200 shadow-inner">
+    <GroupServices />
+  </section>
 
-      <!-- Servicio 2: Aires Evaporativos -->
-      <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100 flex flex-col justify-between hover:shadow-xl transition-shadow">
-        <div>
-          <div class="text-4xl mb-4">🌬️</div>
-          <h3 class="text-2xl font-bold mb-3 text-slate-800">Aires Evaporativos</h3>
-          <p class="text-slate-600 mb-4">
-            Limpieza profunda, cambio de paja/chumacera/bandas, mantenimiento preventivo para temporada y reparación de bombas y motores.
-          </p>
-        </div>
-        <a href="/agendar?servicio=evaporativo" class="text-blue-600 font-semibold hover:underline mt-2 inline-block">Agendar este servicio &rarr;</a>
-      </div>
-
-      <!-- Servicio 3: Electricidad Residencial -->
-      <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100 flex flex-col justify-between hover:shadow-xl transition-shadow">
-        <div>
-          <div class="text-4xl mb-4">⚡</div>
-          <h3 class="text-2xl font-bold mb-3 text-slate-800">Electricidad Residencial</h3>
-          <p class="text-slate-600 mb-4">
-            Instalación de centros de carga, contactos 110V/220V para equipos de aire, solución de cortos y cableado residencial.
-          </p>
-        </div>
-        <a href="/agendar?servicio=electricidad" class="text-blue-600 font-semibold hover:underline mt-2 inline-block">Agendar este servicio &rarr;</a>
-      </div>
-    </div>
+  <!-- 3. Sección Agendar (Formulario Final Paso 2) -->
+  <section id="agendar" class="bg-slate-50 border-t border-slate-200">
+    <FinalBooking />
   </section>
 
   <!-- Banner de Confianza -->
-  <section class="bg-slate-100 py-12 px-4 border-t border-b border-slate-200">
+  <section class="bg-white py-12 px-4 border-t border-slate-200 shadow-sm relative z-10">
     <div class="max-w-4xl mx-auto text-center">
       <h3 class="text-2xl font-bold mb-4 text-slate-800">¿Por qué elegir nuestro servicio técnico?</h3>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center mt-8">
